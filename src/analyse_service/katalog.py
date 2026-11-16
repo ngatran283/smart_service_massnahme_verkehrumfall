@@ -1,6 +1,4 @@
 import pandas as pd
-import numpy as np
-
 
 def massnahmen_empfehlen(df_unf, df_fzg, katalog, min_n=30, basis_unf=None, basis_fzg=None):
     """Prüft jede Situation auf der passenden Ebene und gibt Maßnahmen nach Überschuss priorisiert aus.
@@ -28,9 +26,9 @@ def massnahmen_empfehlen(df_unf, df_fzg, katalog, min_n=30, basis_unf=None, basi
     out.index = out.index + 1
     out.index.name = "Prio"
     return out
-
-
-katalog = [
+MAX_MASSNAHMEN = 3
+KOSTEN = {"M1": 25000, "M2": 40000, "M3": 10000, "M4": 35000, "M5": 30000, "M6": 15000, "M7": 30000}
+KATALOG = [
     {"ID": "M1", "Ebene": "Unfall", "Situation": "Abend/Nacht (20–5 Uhr) in Büro-/Wohngebieten",
      "Bedingung": lambda d: (d["Abend_Nacht"] == 1)
                             & d["Area_accident_occured"].isin(["Office areas", "Residential areas"]),
@@ -62,3 +60,10 @@ katalog = [
      "Massnahme": "Streckenbezogene Geschwindigkeitsüberwachung, Leitpfosten, Fahrbahnmarkierung",
      "3E": "Enforcement, Engineering", "Quelle": "WHO Save LIVES: Speed management; iRAP: Delineation"},
 ]
+
+
+BURO_WOHN = {"Office areas", "Residential areas"}
+def abend_nacht(u):
+    return u["Stunde"] >= 20 or u["Stunde"] <= 5
+NACH_ID = {m["ID"]: m for m in KATALOG}
+
