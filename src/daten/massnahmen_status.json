@@ -1,0 +1,56 @@
+{
+  "1002_4307": {
+    "hotspot": "HS1",
+    "massnahme": "M1",
+    "umgesetzt": false,
+    "seit": "2026-01-01",
+    "seit_ms": 1767225600000,
+    "vorher_schwer": 30,
+    "kontrolle": [
+      "1000_4304",
+      "999_4308",
+      "1000_4309"
+    ],
+    "kontrolle_vorher_schwer": {
+      "1000_4304": 20,
+      "999_4308": 21,
+      "1000_4309": 19
+    }
+  },
+  "998_4309": {
+    "hotspot": "HS2",
+    "massnahme": "M1",
+    "umgesetzt": true,
+    "seit": "2026-01-01",
+    "seit_ms": 1767225600000,
+    "vorher_schwer": 28,
+    "kontrolle": [
+      "1003_4305",
+      "1000_4310",
+      "998_4310"
+    ],
+    "kontrolle_vorher_schwer": {
+      "1003_4305": 17,
+      "1000_4310": 15,
+      "998_4310": 19
+    }
+  },
+  "1003_4320": {
+    "hotspot": "HS3",
+    "massnahme": "M2",
+    "umgesetzt": true,
+    "seit": "2026-01-01",
+    "seit_ms": 1767225600000,
+    "vorher_schwer": 19,
+    "kontrolle": [
+      "1003_4319",
+      "1002_4315",
+      "995_4305"
+    ],
+    "kontrolle_vorher_schwer": {
+      "1003_4319": 12,
+      "1002_4315": 10,
+      "995_4305": 11
+    }
+  }
+}

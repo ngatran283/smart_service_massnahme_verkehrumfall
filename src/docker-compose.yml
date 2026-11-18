@@ -1,0 +1,56 @@
+services:
+  postgres:
+    image: postgres:16
+    ports:
+      - "15433:5432"
+    restart: always
+    environment:
+      POSTGRES_DB: thingsboard
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d thingsboard"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  thingsboard-ce:
+    image: thingsboard/tb-node:4.3.1.8
+    restart: always
+    ports:
+      - "8080:8080"      # UI + REST-API
+      - "1883:1883"      # MQTT
+    environment:
+      TB_SERVICE_ID: tb-ce-node
+      TB_QUEUE_TYPE: in-memory
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/thingsboard
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  analyse:
+    build:
+      context: .
+      dockerfile: analyse_service/Dockerfile
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      TB_URL: http://thingsboard-ce:8080
+      TB_USER: tenant@thingsboard.org
+      TB_PASS: tenant
+      RECALC_SECONDS: "60"
+      ENTDECKEN_ALLE: "10"          # Problemerkennung bei jeder 10. Neuberechnung (= alle 10 Minuten)
+      ENTDECKUNG_OHNE: ""           # Demo: z. B. "M3" -> Baum meldet „Fahrer unter 18“ als neue Situation
+      STATUS_DATEI: /daten/massnahmen_status.json
+    volumes:
+      - ./daten:/daten
+    depends_on:
+      - thingsboard-ce
+
+volumes:
+  postgres-data:
+    name: tb-postgres-data
+    driver: local
